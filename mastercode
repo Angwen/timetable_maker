@@ -89,6 +89,6 @@ for row in orarend:
 
 import csv
 
-output = csv.writer(open("orarend.csv", "w"), delimiter=';') # the name of the output file variable
+output = csv.writer(open("orarend.csv", "w"), delimiter=';',lineterminator='\n') # the name of the output file variable
 for row in orarend:
         output.writerow(row)
