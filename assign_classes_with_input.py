@@ -35,15 +35,33 @@ for row in orarend: # assign filler to blank spaces
                 for i in range(0,5):
                         row.append("Lyukasóra")
 
-"""asking user for number of classes"""
+"""asking user for number and names of classes"""
 
-lit_class = int(input("Magyarórák száma a héten:"))
-mat_class = int(input("Matematikaórák száma a héten:"))
-phys_class = int(input("Fizikaórák száma a héten:"))
+class_numbers = [] # list for all class numbers to calculate sum
 
-print("A héten a magyarórák száma %s, a matematikaórák száma %s, \
-a fizikaórák száma pedig %s. Ez összesen %s óra." \
-% (lit_class, mat_class, phys_class, (lit_class+mat_class+phys_class)))
+class_name1 = input("Tantárgy neve:")
+nr_class1 = int(input(class_name1 + "órák száma a héten:"))
+class_numbers.append(nr_class1)
+class_name2 = input("Tantárgy neve:")
+nr_class2 = int(input(class_name2 + "órák száma a héten:"))
+class_numbers.append(nr_class2)
+class_name3 = input("Tantárgy neve:")
+nr_class3 = int(input(class_name3 + "órák száma a héten:"))
+class_numbers.append(nr_class3)
+
+def classes_total(classes): # function for calculating sum of lessons
+    total = 0
+    for i in classes:
+        total += i
+    return total
+    
+sum_of_lessons = classes_total(class_numbers) # variable for sum of lessons
+
+print("A héten a %sórák száma %s, a %sórák száma %s, \
+a %sórák száma pedig %s. Ez összesen %s óra." \
+% (class_name1, nr_class1, class_name2, nr_class2, \
+class_name3, nr_class3, sum_of_lessons))
+
 
 """assigning classes to empty slots"""
 
@@ -55,9 +73,9 @@ def assign_class(number_of_class, name_of_class): # function for assigning a giv
                                         orarend[timeslot][day] = name_of_class
                                         number_of_class -= 1
 
-assign_class(lit_class, "Irodalomóra")
-assign_class(phys_class, "Fizikaóra")
-assign_class(mat_class, "Matematikaóra")
+assign_class(nr_class1, class_name1)
+assign_class(nr_class2, class_name2)
+assign_class(nr_class3, class_name3)
 
 
 """printing the blank schedule table"""
