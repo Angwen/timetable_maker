@@ -87,8 +87,8 @@ for row in orarend:
 
 """printing the schedule table into a csv file"""
 
-output = open("orarend.csv", "w") # the name of the output file variable
+import csv
+
+output = csv.writer(open("orarend.csv", "w"), delimiter=';') # the name of the output file variable
 for row in orarend:
-        for i in row:
-                output.write(str(i)+" ")
-output.close()
+        output.writerow(row)
