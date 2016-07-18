@@ -2,27 +2,27 @@
 
 orarend = [] # the whole schedule table itself
 
-first_row = []  # creating lists for rows
+header = []  # creating lists for rows
 first_slot = []
 second_slot = []
 third_slot = []
 fourth_slot = []
 
-orarend.append(first_row) # assigning row lists to the schedule table
+orarend.append(header) # assigning row lists to the schedule table
 orarend.append(first_slot)
 orarend.append(second_slot)
 orarend.append(third_slot)
 orarend.append(fourth_slot)
 
-first_row.append("Időpont") # defining column names
-first_row.append("Hétfő")
-first_row.append("Kedd")
-first_row.append("Szerda")
-first_row.append("Csütörtök")
-first_row.append("Péntek")
+header.append("Időpont") # defining column names
+header.append("Hétfő")
+header.append("Kedd")
+header.append("Szerda")
+header.append("Csütörtök")
+header.append("Péntek")
 
 for row in orarend: # creating index for time slot assignment
-        if row != first_row:
+        if row != header:
                 row.append(["Lyukasóra"])
 
 first_slot[0] = "8:00 - 8:45"
@@ -31,35 +31,35 @@ third_slot[0] = "10:00 - 10:45"
 fourth_slot[0] = "11:00 - 11:45"
 	
 for row in orarend: # assign filler to blank spaces
-        if row != first_row:
+        if row != header:
                 for i in range(0,5):
                         row.append("Lyukasóra")
 
 """asking user for number and names of classes"""
 
-class_numbers = [] # lists for calculating sum and changing nonlocal variables
-class_names = []
+subject_numbers = [] # lists for calculating sum and changing nonlocal variables
+subject_names = []
 count = []
 
-def get_input(name_of_class, number_of_class): # function for getting input and checking input type
+def get_input(name_of_subject, number_of_subject): # function for getting input and checking input type
     trials = 1
     while trials > 0:
-        name_of_class = input("Tantárgy neve:")
-        if name_of_class.isnumeric() == False:
-            class_names.append(name_of_class)
+        name_of_subject = input("Tantárgy neve:")
+        if name_of_subject.isnumeric() == False:
+            subject_names.append(name_of_subject)
             count.append(1)
             trials -= 1
         else:
-            print("Érvénytelen adat!")
+            print("Kérlek, adj meg szöveges tantárgynevet!")
     trials2 = 1
     while trials2 > 0:
-        number_of_class = input(name_of_class + "órák száma a héten:")
-        if number_of_class.isnumeric() == True:
-            class_numbers.append(int(number_of_class))
+        number_of_subject = input(name_of_subject + "órák száma a héten:")
+        if number_of_subject.isnumeric() == True:
+            subject_numbers.append(int(number_of_subject))
             trials2 -= 1
         else:
-            print("Érvénytelen adat!")
-    return name_of_class
+            print("Kérlek, egy 1 és 20 közötti számot adj meg!")
+    return name_of_subject
 
 
 def count_total(numbers): # function for calculating the index for variable values from nonlocal lists
@@ -71,59 +71,66 @@ count_sum = count_total(count) # variable storing the index for variable values 
 
 # assigning nonlocal values with the help of the function and nonlocal lists
 
-class_name1 = "" # creating blank variables
-nr_class1 = 0
-get_input(class_name1, nr_class1) # calling function
-class_name1 = class_names[count_sum] # assigning created values to the variables
-nr_class1 = class_numbers[count_sum]
+subject_name1 = "" # creating blank variables
+nr_subject1 = 0
+get_input(subject_name1, nr_subject1) # calling function
+subject_name1 = subject_names[count_sum] # assigning created values to the variables
+nr_subject1 = subject_numbers[count_sum]
 
-class_name2 = ""
-nr_class2 = 0
-get_input(class_name2, nr_class2)
-class_name2 = class_names[count_sum]
-nr_class2 = class_numbers[count_sum]
+subject_name2 = "" 
+nr_subject2 = 0
+get_input(subject_name2, nr_subject2)
+subject_name2 = subject_names[count_sum]
+nr_subject2 = subject_numbers[count_sum]
 
-class_name3 = ""
-nr_class3 = 0
-get_input(class_name3, nr_class3)
+subject_name3 = "" 
+nr_subject3 = 0
+get_input(subject_name3, nr_subject3)
+subject_name3 = subject_names[count_sum]
+nr_subject3 = subject_numbers[count_sum]
 
-class_name3 = class_names[count_sum]
-nr_class3 = class_numbers[count_sum]
-
-def classes_total(classes): # function for calculating total number of classes
+def lessons_total(lessons): # function for calculating total number of classes
     total = 0
-    for i in classes:
+    for i in lessons:
         total += i
     return total
     
-sum_of_classes = classes_total(class_numbers) # variable storing total number of classes
-
-print("A héten a %sórák száma %s, a %sórák száma %s, \
-a %sórák száma pedig %s. Ez összesen %s óra." \
-% (class_name1, nr_class1, class_name2, nr_class2, \
-class_name3, nr_class3, sum_of_classes))
+sum_of_lessons = lessons_total(subject_numbers) # variable storing total number of classes
 
 
 """assigning classes to empty slots"""
 
-def assign_class(number_of_class, name_of_class): # function for assigning a given number of classes to empty slots
+def assign_subject(number_of_subject, name_of_subject): # function for assigning a given number of classes to empty slots
         for timeslot in range(1,5):
                 for day in range(1,6):
                         for row in orarend:
-                                while number_of_class > 0 and orarend[timeslot][day] == "Lyukasóra":
-                                        orarend[timeslot][day] = name_of_class
-                                        number_of_class -= 1
+                                while number_of_subject > 0 and orarend[timeslot][day] == "Lyukasóra":
+                                        orarend[timeslot][day] = name_of_subject
+                                        number_of_subject -= 1
 
-assign_class(nr_class1, class_name1)
-assign_class(nr_class2, class_name2)
-assign_class(nr_class3, class_name3)                   
+assign_subject(nr_subject1, subject_name1) # calling function for the 3 subjects
+assign_subject(nr_subject2, subject_name2)
+assign_subject(nr_subject3, subject_name3)                   
 
-"""printing the schedule table into a csv file"""
+
+"""Üzenet felugró ablakban, csv fájl generálása helyes óraszám esetén"""
+
+message = "A héten %s %sóra, %s %sóra és %s %sóra lesz. Ez összesen %s óra. A generált órarendet az orarend.csv fájlban találod." \
+% (nr_subject1, subject_name1, nr_subject2, subject_name2, nr_subject3, subject_name3, sum_of_lessons)
 
 import csv
+import tkinter
+import tkinter.messagebox as mbox
 
-output = csv.writer(open("orarend.csv", "w"), delimiter=';',lineterminator='\n') # the name of the output file variable
-for row in orarend:
-        output.writerow(row)
-        
-print("A generált órarendet az orarend.csv fájlban találod.")  
+window = tkinter.Tk()
+window.wm_withdraw()
+
+if sum_of_lessons > 20:
+        mbox.showinfo('Órarendkészítő','A megadott óraszám túl magas! Kérlek, összesen legfeljebb 20 db. órát adj meg.')
+else:
+        mbox.showinfo('Órarendkészítő',message)
+        output = csv.writer(open("orarend.csv", "w"), delimiter=';',lineterminator='\n') # the name of the output file variable
+        for row in orarend:
+                output.writerow(row)
+
+
