@@ -1,3 +1,14 @@
+"""opening message"""
+
+import tkinter
+import tkinter.messagebox as mbox
+
+window = tkinter.Tk()
+window.wm_withdraw()
+
+mbox.showinfo('Órarendkészítő',"Ez egy órarendkészítő alkalmazás, \
+ami az általad megadott három tantárgy nevéből és számából generál egy órarendet.")
+
 """making the blank schedule table"""
 
 orarend = [] # the whole schedule table itself
@@ -29,7 +40,7 @@ first_slot[0] = "8:00 - 8:45"
 second_slot[0] = "9:00 - 9:45"
 third_slot[0] = "10:00 - 10:45"
 fourth_slot[0] = "11:00 - 11:45"
-	
+    
 for row in orarend: # assign filler to blank spaces
         if row != header:
                 for i in range(0,5):
@@ -45,20 +56,25 @@ def get_input(name_of_subject, number_of_subject): # function for getting input 
     trials = 1
     while trials > 0:
         name_of_subject = input("Tantárgy neve:")
-        if name_of_subject.isnumeric() == False:
+        if name_of_subject == "" or name_of_subject == " ":
+            print("Kérlek, ne hagyd üresen a mezőt!")
+        elif name_of_subject.isnumeric() == True:
+            print("Kérlek, adj meg szöveges tantárgynevet!")
+        else: 
             subject_names.append(name_of_subject)
             count.append(1)
             trials -= 1
-        else:
-            print("Kérlek, adj meg szöveges tantárgynevet!")
     trials2 = 1
     while trials2 > 0:
         number_of_subject = input(name_of_subject + "órák száma a héten:")
-        if number_of_subject.isnumeric() == True:
+        if number_of_subject.isnumeric() == False:
+            print("Kérlek, egy számot adj meg!")
+        elif int(number_of_subject) > 20:
+            print("Kérlek, egy 1 és 20 közötti számot adj meg!")
+        else:
             subject_numbers.append(int(number_of_subject))
             trials2 -= 1
-        else:
-            print("Kérlek, egy 1 és 20 közötti számot adj meg!")
+        
     return name_of_subject
 
 
@@ -113,17 +129,13 @@ assign_subject(nr_subject2, subject_name2)
 assign_subject(nr_subject3, subject_name3)                   
 
 
-"""Üzenet felugró ablakban, csv fájl generálása helyes óraszám esetén"""
+"""pop-up message box; in case of correct input, generation of a csv file"""
 
-message = "A héten %s %sóra, %s %sóra és %s %sóra lesz. Ez összesen %s óra. A generált órarendet az orarend.csv fájlban találod." \
+message = "Egy héten %s %sóra, %s %sóra és %s %sóra lesz. Ez összesen %s óra. A generált órarendet az orarend.csv fájlban találod." \
 % (nr_subject1, subject_name1, nr_subject2, subject_name2, nr_subject3, subject_name3, sum_of_lessons)
 
 import csv
-import tkinter
-import tkinter.messagebox as mbox
 
-window = tkinter.Tk()
-window.wm_withdraw()
 
 if sum_of_lessons > 20:
         mbox.showinfo('Órarendkészítő','A megadott óraszám túl magas! Kérlek, összesen legfeljebb 20 db. órát adj meg.')
