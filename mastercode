@@ -37,30 +37,70 @@ for row in orarend: # assign filler to blank spaces
 
 """asking user for number and names of classes"""
 
-class_numbers = [] # list for all class numbers to calculate sum
+class_numbers = [] # lists for calculating sum and changing nonlocal variables
+class_names = []
+count = []
 
-class_name1 = input("Tantárgy neve:")
-nr_class1 = int(input(class_name1 + "órák száma a héten:"))
-class_numbers.append(nr_class1)
-class_name2 = input("Tantárgy neve:")
-nr_class2 = int(input(class_name2 + "órák száma a héten:"))
-class_numbers.append(nr_class2)
-class_name3 = input("Tantárgy neve:")
-nr_class3 = int(input(class_name3 + "órák száma a héten:"))
-class_numbers.append(nr_class3)
+def get_input(name_of_class, number_of_class): # function for getting input and checking input type
+    trials = 1
+    while trials > 0:
+        name_of_class = input("Tantárgy neve:")
+        if name_of_class.isnumeric() == False:
+            class_names.append(name_of_class)
+            count.append(1)
+            trials -= 1
+        else:
+            print("Érvénytelen adat!")
+    trials2 = 1
+    while trials2 > 0:
+        number_of_class = input(name_of_class + "órák száma a héten:")
+        if number_of_class.isnumeric() == True:
+            class_numbers.append(int(number_of_class))
+            trials2 -= 1
+        else:
+            print("Érvénytelen adat!")
+    return name_of_class
 
-def classes_total(classes): # function for calculating sum of lessons
+
+def count_total(numbers): # function for calculating the index for variable values from nonlocal lists
+    total = 0
+    for number in numbers:
+        total += number
+    return total - 1
+count_sum = count_total(count) # variable storing the index for variable values from nonlocal lists
+
+# assigning nonlocal values with the help of the function and nonlocal lists
+class_name1 = "" # creating blank variables
+nr_class1 = 0
+get_input(class_name1, nr_class1) # calling function
+class_name1 = class_names[count_sum] # assigning created values to the variables
+nr_class1 = class_numbers[count_sum]
+
+class_name2 = ""
+nr_class2 = 0
+get_input(class_name2, nr_class2)
+class_name2 = class_names[count_sum]
+nr_class2 = class_numbers[count_sum]
+
+class_name3 = ""
+nr_class3 = 0
+get_input(class_name3, nr_class3)
+
+class_name3 = class_names[count_sum]
+nr_class3 = class_numbers[count_sum]
+
+def classes_total(classes): # function for calculating total number of classes
     total = 0
     for i in classes:
         total += i
     return total
     
-sum_of_lessons = classes_total(class_numbers) # variable for sum of lessons
+sum_of_classes = classes_total(class_numbers) # variable storing total number of classes
 
 print("A héten a %sórák száma %s, a %sórák száma %s, \
 a %sórák száma pedig %s. Ez összesen %s óra." \
 % (class_name1, nr_class1, class_name2, nr_class2, \
-class_name3, nr_class3, sum_of_lessons))
+class_name3, nr_class3, sum_of_classes))
 
 
 """assigning classes to empty slots"""
@@ -78,12 +118,13 @@ assign_class(nr_class2, class_name2)
 assign_class(nr_class3, class_name3)
 
 
-"""printing the blank schedule table"""
+"""printing the schedule table"""
 
 for row in orarend:
         for i in row:
                 print(i, end=" ")
-                               
+
+print("Az órarendet az orarend.csv fájlban találod.")                               
 
 """printing the schedule table into a csv file"""
 
