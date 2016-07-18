@@ -70,6 +70,7 @@ def count_total(numbers): # function for calculating the index for variable valu
 count_sum = count_total(count) # variable storing the index for variable values from nonlocal lists
 
 # assigning nonlocal values with the help of the function and nonlocal lists
+
 class_name1 = "" # creating blank variables
 nr_class1 = 0
 get_input(class_name1, nr_class1) # calling function
@@ -115,16 +116,7 @@ def assign_class(number_of_class, name_of_class): # function for assigning a giv
 
 assign_class(nr_class1, class_name1)
 assign_class(nr_class2, class_name2)
-assign_class(nr_class3, class_name3)
-
-
-"""printing the schedule table"""
-
-for row in orarend:
-        for i in row:
-                print(i, " ")
-
-print("Az órarendet az orarend.csv fájlban találod.")                               
+assign_class(nr_class3, class_name3)                   
 
 """printing the schedule table into a csv file"""
 
@@ -133,3 +125,5 @@ import csv
 output = csv.writer(open("orarend.csv", "w"), delimiter=';',lineterminator='\n') # the name of the output file variable
 for row in orarend:
         output.writerow(row)
+        
+print("A generált órarendet az orarend.csv fájlban találod.")  
