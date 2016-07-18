@@ -122,7 +122,7 @@ assign_class(nr_class3, class_name3)
 
 for row in orarend:
         for i in row:
-                print(i, end=" ")
+                print(i, " ")
 
 print("Az órarendet az orarend.csv fájlban találod.")                               
 
