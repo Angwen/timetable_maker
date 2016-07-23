@@ -1,0 +1,195 @@
+"""opening message"""
+
+import tkinter
+import tkinter.messagebox as mbox
+
+window = tkinter.Tk()
+window.wm_withdraw()
+
+mbox.showinfo('Órarendkészítő',"Ez egy órarendkészítő alkalmazás, \
+ami az általad megadott három tantárgy nevéből és számából generál egy órarendet.")
+
+"""making the blank schedule table"""
+
+orarend = [] # the whole schedule table itself
+
+header = []  # creating lists for rows
+first_slot = []
+second_slot = []
+third_slot = []
+fourth_slot = []
+
+orarend.append(header) # assigning row lists to the schedule table
+orarend.append(first_slot)
+orarend.append(second_slot)
+orarend.append(third_slot)
+orarend.append(fourth_slot)
+
+header.append("Időpont") # defining column names
+header.append("Hétfő")
+header.append("Kedd")
+header.append("Szerda")
+header.append("Csütörtök")
+header.append("Péntek")
+
+for row in orarend: # creating blank spaces for the table
+        if orarend.index(row) != 0:
+                for i in range(0,6):
+                        row.append("Lyukasóra")
+
+first_slot[0] = "8:00 - 8:45" # assigning timeframes
+second_slot[0] = "9:00 - 9:45"
+third_slot[0] = "10:00 - 10:45"
+fourth_slot[0] = "11:00 - 11:45"
+
+"""asking user for number and names of classes"""
+
+subject_numbers = [] # lists for calculating sum and changing nonlocal variables
+
+def get_input(): # function for getting input and checking input type
+    trials = 1
+    while trials > 0:
+        name_of_subject = input(("Tantárgy neve:"))
+        if name_of_subject == "" or name_of_subject == " ":
+            print("Kérlek, ne hagyd üresen a mezőt!")
+        elif name_of_subject.isnumeric() == True:
+            print("Kérlek, adj meg szöveges tantárgynevet!")
+        else: 
+            trials -= 1
+    trials2 = 1
+    while trials2 > 0:
+        number_of_subject = input(name_of_subject + "órák száma a héten:")
+        if number_of_subject.isnumeric() == False:
+            print("Kérlek, egy számot adj meg!")
+        elif int(number_of_subject) > 20:
+            print("Kérlek, egy 1 és 20 közötti számot adj meg!")
+        else:
+            subject_numbers.append(int(number_of_subject))
+            trials2 -= 1
+            return name_of_subject,int(number_of_subject)
+        
+# calling the function to get input
+
+def lessons_total(lessons): # function for calculating total number of classes
+    total = 0
+    for i in lessons:
+        total += i
+    return total
+    
+sum_of_lessons = lessons_total(subject_numbers) # variable storing total number of classes
+
+trials = 1
+while trials > 0:
+    
+    subject_numbers = []
+    sum_of_lessons = lessons_total(subject_numbers)
+
+    first_round = get_input()
+    subject_name1 = first_round[0]
+    nr_subject1 = first_round[1]
+    sum_of_lessons = lessons_total(subject_numbers)
+    print("Eddigi órák száma összesen:",sum_of_lessons)
+    print("Összesen 20 db. óra lehet a héten.")
+
+    second_round = get_input()
+    subject_name2 = second_round[0]
+    nr_subject2 = second_round[1]
+    sum_of_lessons = lessons_total(subject_numbers)
+    print("Eddigi órák száma összesen:",sum_of_lessons)
+    print("Összesen 20 db. óra lehet a héten.")
+
+    third_round = get_input()
+    subject_name3 = third_round[0]
+    nr_subject3 = third_round[1]
+    sum_of_lessons = lessons_total(subject_numbers)
+
+
+    if sum_of_lessons > 20:
+        mbox.showinfo('Órarendkészítő','A megadott óraszám túl magas! Kérlek, összesen legfeljebb 20 db. órát adj meg.')
+    else:
+        trials -= 1
+
+
+"""assigning classes to empty slots"""
+
+def assign_subject(number_of_subject, name_of_subject): # function for assigning a given number of classes to empty slots
+        import random
+        while number_of_subject > 0:
+            timeslot = random.randint(1,4)
+            day = random.randint(1,5)
+            if orarend[timeslot][day] == "Lyukasóra":
+                orarend[timeslot][day] = name_of_subject
+                number_of_subject -=1
+
+assign_subject(nr_subject1, subject_name1) # calling function for the 3 subjects
+assign_subject(nr_subject2, subject_name2)
+assign_subject(nr_subject3, subject_name3)                   
+
+
+"""rearranging table by columns"""
+
+schedule_by_columns = []
+
+monday = []
+tuesday = []
+wednesday = []
+thursday = []
+friday = []
+
+def rearrange(day,column):
+        for row in orarend:
+                if orarend.index(row) != 0:
+                        day.append(row[column])
+
+rearrange(monday,1)
+rearrange(tuesday,2)
+rearrange(wednesday,3)
+rearrange(thursday,4)
+rearrange(friday,5)
+     
+schedule_by_columns.append(monday)
+schedule_by_columns.append(tuesday)
+schedule_by_columns.append(wednesday)
+schedule_by_columns.append(thursday)
+schedule_by_columns.append(friday)
+
+
+"""defining constraints"""
+
+# moving empty slots to the end of the day, except from the first slot
+for line in schedule_by_columns:
+        n = line.count("Lyukasóra")
+        while n > 0:
+                if line.index("Lyukasóra") == 0:
+                        line[0] = "Temp"
+                        n -= 1
+                else:
+                        x = line.index("Lyukasóra")
+                        placeholder = line[3-(n-1)]
+                        line[3-(n-1)] = "Lyukasóra"
+                        line[x] = placeholder
+                        n -= 1
+        if line[0] == "Temp":
+                line[0] = "Lyukasóra"
+        
+
+"""arranging table back by rows"""
+
+for row in orarend:
+        for x in range(1,5):
+                for y in range (1,6):
+                        orarend[x][y] = schedule_by_columns[y-1][x-1]
+
+
+"""pop-up message box; in case of correct input, generation of a csv file"""
+
+
+message = "Egy héten %s %sóra, %s %sóra és %s %sóra lesz. Ez összesen %s óra. A generált órarendet az orarend.csv fájlban találod." \
+% (nr_subject1, subject_name1, nr_subject2, subject_name2, nr_subject3, subject_name3, sum_of_lessons)
+
+import csv
+
+mbox.showinfo('Órarendkészítő',message)
+output = csv.writer(open("orarend.csv", "w"), delimiter=';',lineterminator='\n') # the name of the output file variable
+for row in orarend:
+    output.writerow(row)
