@@ -1,6 +1,6 @@
 """making the blank schedule table"""
 
-orarend = [] # the whole schedule table itself
+schedule = [] # the whole schedule table itself
 
 first_row = []  # creating lists for rows
 first_slot = []
@@ -8,11 +8,11 @@ second_slot = []
 third_slot = []
 fourth_slot = []
 
-orarend.append(first_row) # assigning row lists to the schedule table
-orarend.append(first_slot)
-orarend.append(second_slot)
-orarend.append(third_slot)
-orarend.append(fourth_slot)
+schedule.append(first_row) # assigning row lists to the schedule table
+schedule.append(first_slot)
+schedule.append(second_slot)
+schedule.append(third_slot)
+schedule.append(fourth_slot)
 
 first_row.append("Időpont") # defining column names
 first_row.append("Hétfő")
@@ -21,7 +21,7 @@ first_row.append("Szerda")
 first_row.append("Csütörtök")
 first_row.append("Péntek")
 
-for row in orarend: # creating index for time slot assignment
+for row in schedule: # creating index for time slot assignment
         if row != first_row:
                 row.append(["Lyukasóra"])
 
@@ -30,7 +30,7 @@ second_slot[0] = "9:00 - 9:45"
 third_slot[0] = "10:00 - 10:45"
 fourth_slot[0] = "11:00 - 11:45"
 	
-for row in orarend: # assign filler to blank spaces
+for row in schedule: # assign filler to blank spaces
         if row != first_row:
                 for i in range(0,5):
                         row.append("Lyukasóra")
@@ -43,9 +43,9 @@ def assign_class(number_of_class, name_of_class): # function for assigning a giv
         while number_of_class > 0:
                 for x in range(1,5):
                         for y in range(1,6):
-                                for row in orarend:
-                                        if orarend[x][y] == "Lyukasóra":
-                                                orarend[x][y] = name_of_class
+                                for row in schedule:
+                                        if schedule[x][y] == "Lyukasóra":
+                                                schedule[x][y] = name_of_class
                                                 number_of_class -= 1
 
 assign_class(lit_cl, "Irodalomóra")
@@ -53,7 +53,7 @@ assign_class(lit_cl, "Irodalomóra")
 
 """printing the blank schedule table"""
 
-for row in orarend:
+for row in schedule:
         for i in row:
                 print(i, end=" ")
                                
@@ -61,7 +61,7 @@ for row in orarend:
 """printing the schedule table into a csv file"""
 
 output = open("orarend.csv", "w") # the name of the output file variable
-for row in orarend:
+for row in schedule:
         for i in row:
                 output.write(str(i)+" ")
 output.close()
