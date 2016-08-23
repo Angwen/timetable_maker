@@ -38,8 +38,7 @@ class Subjects:
         self.subject3 = subject3
 
     def __str__(self):
-        # TODO: implement using tag variables
-        pass
+        return "Subject{subject1=%s;subject2=%s;subject3=%s}" % (self.subject1, self.subject2, self.subject3)
 
     def calculate_sum_of_lessons(self):
         return calculate_total_lessons_count(self.subject_numbers)
@@ -61,17 +60,17 @@ def create_blank_scheduler_table():
     header = ["Időpont", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek"]
     schedule = [header, [], [], [], []]
     create_blank_slots()
-    assign_column_labels()
+    assign_row_labels()
 
 
-def assign_column_labels():
-    assign_column_label(1, "8:00 - 8:45")
-    assign_column_label(2, "9:00 - 9:45")
-    assign_column_label(3, "10:00 - 10:45")
-    assign_column_label(4, "11:00 - 11:45")
+def assign_row_labels():
+    assign_row_label(1, "8:00 - 8:45")
+    assign_row_label(2, "9:00 - 9:45")
+    assign_row_label(3, "10:00 - 10:45")
+    assign_row_label(4, "11:00 - 11:45")
 
 
-def assign_column_label(column_index, label):
+def assign_row_label(column_index, label):
     global schedule
     schedule[column_index][0] = label
 
@@ -80,7 +79,7 @@ def create_blank_slots():
     global schedule
     for row in schedule:
         if schedule.index(row) != 0:
-            for column_index in range(0, 6):
+            for column_index in range(0, len(schedule)+1):
                 row.append(LABEL_BLANK_SLOT)
 
 
@@ -90,6 +89,7 @@ def check_and_create_subject():
     :return: a Subject
     """
     textual_input_present = False
+    name_of_subject = ''
     while not textual_input_present:
         name_of_subject = input(("Tantárgy neve:"))
         if len(name_of_subject.strip()) == 0:
@@ -104,7 +104,7 @@ def check_and_create_subject():
         number_of_subject = input(name_of_subject + "órák száma a héten:")
         if not number_of_subject.isnumeric():
             print("Kérlek, egy számot adj meg!")
-        elif int(number_of_subject) > 20:
+        elif int(number_of_subject) > 20 or int(number_of_subject) == 0:
             print("Kérlek, egy 1 és 20 közötti számot adj meg!")
         else:
             subjects.subject_numbers.append(int(number_of_subject))
@@ -126,16 +126,19 @@ def read_and_create_model():
         subject_numbers = []
 
         subject1 = check_and_create_subject()
+        subject_numbers.append(subject1.subject_number)
         sum_of_lessons = calculate_total_lessons_count(subject_numbers)
         print(EDDIGI_ORAK_OSSZESEN, sum_of_lessons)
         print("Összesen 20 db. óra lehet a héten.")
 
         subject2 = check_and_create_subject()
+        subject_numbers.append(subject2.subject_number)
         sum_of_lessons = calculate_total_lessons_count(subject_numbers)
         print(EDDIGI_ORAK_OSSZESEN, sum_of_lessons)
         print("Összesen 20 db. óra lehet a héten.")
 
         subject3 = check_and_create_subject()
+        subject_numbers.append(subject3.subject_number)
         sum_of_lessons = calculate_total_lessons_count(subject_numbers)
 
         if sum_of_lessons > 20:
@@ -215,9 +218,11 @@ def store_constrained_and_ordered_timetable(schedule_by_day):
 
 
 def popup_message_box():
+    # window = tkinter.Tk()
+    # window.wm_withdraw()
     message = "Egy héten %s %sóra, %s %sóra és %s %sóra lesz. Ez összesen %s óra. A generált órarendet az orarend.csv fájlban találod." \
-              % (subjects.subject1.subject_number, subjects.subject1.subject_name, subjects.subject1.subject_number,
-                 subjects.subject1.subject_name, subjects.subject1.subject_number, subjects.subject1.subject_number,
+              % (subjects.subject1.subject_number, subjects.subject1.subject_name, subjects.subject2.subject_number,
+                 subjects.subject2.subject_name, subjects.subject3.subject_number, subjects.subject3.subject_name,
                  subjects.calculate_sum_of_lessons())
     mbox.showinfo(ORARENDKESZITO, message)
 
